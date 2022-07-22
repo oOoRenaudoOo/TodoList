@@ -4,12 +4,14 @@ import { Input, Icon, ListItem, Button, SpeedDial } from '@rneui/themed'
 
 import Swipe from './Swipe'
 
+import DialogInput from 'react-native-dialog-input'
 
 const initTask = [
 
 ];
 
 const TodoList = () => {
+
   //detection de l'ajout d'un element dans initTask
   const [getTask, setTask] = useState(initTask)
 
@@ -23,16 +25,16 @@ const TodoList = () => {
   }
 
   // ajouter un element saisi
-  const ajouter = () => {
+  const ajouter = (textValue) => {
 
-    if (getText != "") {
+    if (textValue != "") {
 
-      console.log(getText)
+      console.log(textValue)
 
     setTask([
       
       { id: getTask.length + 1,
-        tache: getText
+        tache: textValue
       },
       ... getTask
     ])
@@ -44,6 +46,8 @@ const TodoList = () => {
       // console.log("saisie vide")
       alert("vide")
     }
+
+    setOpenDialogue(!openDialogue)
   }
 
 
@@ -63,6 +67,7 @@ const TodoList = () => {
 
   const [open, setOpen] = React.useState(false) 
 
+  const [openDialogue, setOpenDialogue] = useState(false)
 
   return (
     <View>
@@ -74,7 +79,8 @@ const TodoList = () => {
               <View style={styles.IconListeVide}>
                 <Icon
                   name="fact-check"
-                  color='white' 
+                  color='white'
+                  style={{height: 100}}
                 />
               </View>
             </View>
@@ -82,37 +88,33 @@ const TodoList = () => {
           data = { getTask }
           renderItem = { ({item}) => <Swipe tache={item.tache} id={item.id} suppCallBack={supprimer} />}
           ListHeaderComponent = {
-            <Input
-              placeholder='SAISIR UNE TACHE' 
-              onChangeText = { textChange }
-              value = { getText }
-              rightIcon = {
-                <Icon
-                  name="chevron-right"
-                  onPress = { ajouter }
-                />
-              }
-            />
+            <View style={styles.headerView}>
+            <Text style={styles.headerText}>TODO LIST</Text>
+            </View>
           }
         />
+
+        <DialogInput isDialogVisible={openDialogue}
+          title={"Ajout d'une tache"}
+          message={"Saisir une tâche"}
+          hintInput ={"..............."}
+          submitInput={ (inputText) => { ajouter(inputText) } }
+          closeDialog={ () => setOpenDialogue(!openDialogue) }>
+        </DialogInput>
+          
         <SpeedDial
-            isOpen={open}
-            icon={{ name: 'edit', color: '#fff' }}
-            openIcon={{ name: 'close', color: '#fff' }}
-            onOpen={() => setOpen(!open)}
-            onClose={() => setOpen(!open)}
-            style={{height: 750}}
-          >
-            <SpeedDial.Action
-              icon={{ name: 'add', color: '#fff' }}
-              title="Add"
-              onPress={() => console.log('Add Something')}
-            />
-            <SpeedDial.Action
-              icon={{ name: 'delete', color: '#fff' }}
-              title="Delete"
-              onPress={() => console.log('Delete Something')}
-            />
+          isOpen={open}
+          icon={{ name: 'edit', color: '#fff' }}
+          openIcon={{ name: 'close', color: '#fff' }}
+          onOpen={() => setOpenDialogue(!open)}
+          onClose={() => setOpen(!open)}
+          style={{height: 750}}
+        >
+          <SpeedDial.Action
+            icon={{ name: 'add', color: '#fff' }}
+            title="Add"
+            onPress={() => setOpenDialogue(!openDialogue)}
+          />
         </SpeedDial>
       </SafeAreaView>
     </View>
@@ -142,11 +144,23 @@ const styles = StyleSheet.create({
 
   IconListeVide: {
     flex: 1,
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+    height: 200,
+    width: 200,
+    borderRadius:200
+  
   },
   
-  bottomView : {
-    marginTop: 300,
+  headerText: {
+  
+    color: 'white',
+    fontSize: 40,
+    height: 100,
+    textAlign: 'center',
+  },
 
+  headerView: {
+    padding: 10,
+    backgroundColor: "#2AD3B4",
   }
 })
