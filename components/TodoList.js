@@ -125,7 +125,7 @@ export default TodoList
 const styles = StyleSheet.create({
   pageListeVide : {
     backgroundColor: "#52C4C1",
-    padding: 20,
+    padding: 25,
     margin: 20,
   },
 
