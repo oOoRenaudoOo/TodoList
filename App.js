@@ -4,7 +4,7 @@ import TodoList from './components/TodoList'
 
 const App = () => {
   return (
-    <View>
+    <View style={{backgroundColor: '#52C4C1'}}>
       <TodoList></TodoList>
     </View>
   )
@@ -12,4 +12,8 @@ const App = () => {
 
 export default App
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  body: {
+    backgroundColor: '#52C4C1'
+  }
+})
